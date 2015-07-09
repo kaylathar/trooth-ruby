@@ -83,9 +83,6 @@ static VALUE less_than_equal(VALUE self, VALUE rb_object)
 {
 	Trooth_BigIntWrapper* wrapper1,*wrapper2;
 
-	/* Update this when we support comparing a string or FixNum... */
-        Check_Type(rb_object,T_OBJECT);
-
 	if (RBASIC(rb_object)->klass == cTroothBigInt)
 	{
         	rb_raise(rb_eTypeError, "not a valid value");
