@@ -56,6 +56,3 @@ DEPENDENCIES
   rubocop
   simplecov
   trooth!
-
-BUNDLED WITH
-   1.10.5
