@@ -9,13 +9,10 @@ require 'rake/extensiontask'
 spec = Gem::Specification.load('trooth.gemspec')
 RSpec::Core::RakeTask.new(:spec)
 
-desc 'Build Native Extension'
-task :trooth do
-  Rake::ExtensionTask.new('trooth', spec)
-end
+Rake::ExtensionTask.new('trooth', spec)
 
 desc 'Validate Package'
-task validate: [:trooth, :rubocop, :spec]
+task validate: [:rubocop, :compile, :spec]
 task default: :validate
 
 desc 'Run Rubocop'

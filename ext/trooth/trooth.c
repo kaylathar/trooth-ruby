@@ -1,6 +1,8 @@
-#include <ruby.h>
+#include "trooth.h"
 
 void Init_trooth()
 {
-	VALUE mTrooth = rb_define_module("Trooth");
+	mTrooth = rb_define_module("Trooth");
+
+	Init_trooth_BigInt();
 }
