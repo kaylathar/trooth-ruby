@@ -4,8 +4,6 @@
 
 void Init_trooth_BigInt();
 
-extern VALUE cTroothBigInt;
-
 typedef struct {
 	TR_BigInt* num;
 } Trooth_BigIntWrapper;

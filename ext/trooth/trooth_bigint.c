@@ -4,6 +4,7 @@
 #include <ruby/ruby.h>
 
 static TR_Environment* globalEnvironment;
+static VALUE cTroothBigInt;
 
 static VALUE add(VALUE self, VALUE rb_object);
 static VALUE subtract(VALUE self, VALUE rb_object);
