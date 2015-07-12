@@ -21,6 +21,8 @@ static VALUE absolute(VALUE self);
 static VALUE initialize(VALUE self, VALUE rb_object);
 static VALUE allocate(VALUE klass);
 static VALUE deallocate(void* bigInt);
+static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object);
+static VALUE to_string(VALUE self);
 
 void Init_trooth_BigInt()
 {
@@ -37,6 +39,8 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, "<=", less_than_equal, 1);
 	rb_define_method(cTroothBigInt, ">=", greater_than_equal, 1);
 	rb_define_method(cTroothBigInt, "abs", absolute, 0);
+	rb_define_method(cTroothBigInt, "to_s", to_string, 0);
+
 
 	globalEnvironment = TR_Environment_alloc();
 }
@@ -135,10 +139,51 @@ static VALUE less_than_equal(VALUE self, VALUE rb_object)
 
 static VALUE absolute(VALUE self)
 {
+	Trooth_BigIntWrapper *wrapper1,*wrapper2;
+	TR_BigInt* result;
+	VALUE obj;
 
+	validate_is_BigInt(self);
+
+	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper1);
+
+	if (!wrapper1->num)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	 result = TR_BigInt_absolute(wrapper1->num);
+
+	 obj = allocate(cTroothBigInt);
+
+	 Data_Get_Struct(obj, Trooth_BigIntWrapper, wrapper2);
+	 wrapper2->num = result;
+	 return obj;
 }
 
+static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object)
+{
+	TR_BigInt *bigInt = NULL;
+	VALUE tmpStr;
 
+	switch(TYPE(rb_object))
+	{
+		/* When API is available, we can handle these faster */
+		case T_FIXNUM:
+		case T_BIGNUM:
+			tmpStr = rb_any_to_s(rb_object);
+			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(tmpStr));
+			break;
+		case T_STRING:
+			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(rb_object));
+			break;
+		default:
+			rb_raise(rb_eTypeError, "not a valid value");
+			break;
+	}
+
+	return bigInt;
+}
 
 static VALUE initialize(VALUE self, VALUE rb_object)
 {
@@ -146,21 +191,31 @@ static VALUE initialize(VALUE self, VALUE rb_object)
 
 	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper);
 
-	switch(TYPE(rb_object))
-	{
-		case T_FIXNUM:
-			break;
-		case T_BIGNUM:
-			break;
-		case T_STRING:
-			wrapper->num = TR_BigInt_fromString(globalEnvironment, StringValueCStr(rb_object));
-			break;
-		default:
-			rb_raise(rb_eTypeError, "not a valid value");
-			break;
-	}
+	wrapper->num = ruby_obj_to_bigint(rb_object);
 
 	return self;
+}
+
+static VALUE to_string(VALUE self)
+{
+	Trooth_BigIntWrapper *wrapper;
+	char* result;
+	VALUE obj;
+
+	validate_is_BigInt(self);
+
+	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper);
+
+	if (!wrapper->num)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	 result = TR_BigInt_toString(wrapper->num);
+	 obj = rb_str_new2(result);
+	 free(result);
+
+	 return obj;
 }
 
 static VALUE allocate(VALUE klass)
@@ -180,4 +235,5 @@ static VALUE deallocate(void* bigInt)
 			wrapper->num = NULL;
 	}
 	free(wrapper);
+	return NULL;
 }
