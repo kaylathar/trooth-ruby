@@ -8,4 +8,6 @@ typedef struct {
 	TR_BigInt* num;
 } Trooth_BigIntWrapper;
 
+typedef TR_BigInt* (*ArithmeticFunction)(TR_BigInt *op1, TR_BigInt *op2);
+
 #endif
