@@ -5,5 +5,5 @@ rvm:
   - 2.0.0
 
 before_script:
-  - git clone git@github.com:klmcarthur/trooth.git /tmp/trooth/
+  - git clone https://github.com/klmcarthur/trooth.git /tmp/trooth/
   - cd /tmp/trooth && ./configure && make && sudo make install
