@@ -92,6 +92,33 @@ static VALUE execute_arithmetic(VALUE val1, VALUE val2, ArithmeticFunction func)
 	 return obj;
 }
 
+static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object)
+{
+	TR_BigInt *bigInt = NULL;
+	VALUE tmpStr;
+	ID toStringSymbol;
+
+	switch(TYPE(rb_object))
+	{
+		/* When API is available, we can handle these faster */
+		case T_FIXNUM:
+		case T_BIGNUM:
+			toStringSymbol = rb_intern("to_s");
+			tmpStr = rb_funcall(rb_object,toStringSymbol,0);
+			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(tmpStr));
+			break;
+		case T_STRING:
+			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(rb_object));
+			break;
+		default:
+			rb_raise(rb_eTypeError, "not a valid value");
+			break;
+	}
+
+	return bigInt;
+}
+
+
 static VALUE add(VALUE self, VALUE rb_object)
 {
 	return execute_arithmetic(self,rb_object,TR_BigInt_add);
@@ -159,30 +186,6 @@ static VALUE absolute(VALUE self)
 	 Data_Get_Struct(obj, Trooth_BigIntWrapper, wrapper2);
 	 wrapper2->num = result;
 	 return obj;
-}
-
-static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object)
-{
-	TR_BigInt *bigInt = NULL;
-	VALUE tmpStr;
-
-	switch(TYPE(rb_object))
-	{
-		/* When API is available, we can handle these faster */
-		case T_FIXNUM:
-		case T_BIGNUM:
-			tmpStr = rb_any_to_s(rb_object);
-			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(tmpStr));
-			break;
-		case T_STRING:
-			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(rb_object));
-			break;
-		default:
-			rb_raise(rb_eTypeError, "not a valid value");
-			break;
-	}
-
-	return bigInt;
 }
 
 static VALUE initialize(VALUE self, VALUE rb_object)
