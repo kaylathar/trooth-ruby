@@ -7,6 +7,6 @@ rvm:
 before_script:
   - sudo apt-get install check
   - git clone https://github.com/klmcarthur/trooth.git /tmp/trooth/
-  - pushd
-  - cd /tmp/trooth && ./configure && make && sudo make install
+  - pushd /tmp/trooth
+  - ./configure && make && sudo make install
   - popd
