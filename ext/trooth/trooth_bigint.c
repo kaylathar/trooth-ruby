@@ -235,5 +235,5 @@ static VALUE deallocate(void* bigInt)
 			wrapper->num = NULL;
 	}
 	free(wrapper);
-	return NULL;
+	return Qnil;
 }
