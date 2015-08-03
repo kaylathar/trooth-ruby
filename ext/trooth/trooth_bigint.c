@@ -3,7 +3,6 @@
 #include <trooth/bigint.h>
 #include <ruby/ruby.h>
 
-static TR_Environment* globalEnvironment;
 VALUE cTroothBigInt;
 
 static void validate_is_BigInt(VALUE rb_object);
@@ -40,9 +39,6 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, ">=", greater_than_equal, 1);
 	rb_define_method(cTroothBigInt, "abs", absolute, 0);
 	rb_define_method(cTroothBigInt, "to_s", to_string, 0);
-
-
-	globalEnvironment = TR_Environment_alloc();
 }
 
 static void validate_is_BigInt(VALUE rb_object)

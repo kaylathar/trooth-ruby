@@ -3,9 +3,7 @@
 #include <trooth/fraction.h>
 #include <ruby/ruby.h>
 
-static TR_Environment* globalEnvironment;
 static VALUE cTroothFraction;
-
 static void validate_is_Fraction(VALUE rb_object);
 static VALUE numerator(VALUE self);
 static VALUE denominator(VALUE self);
@@ -31,9 +29,6 @@ void Init_trooth_Fraction()
 	rb_define_method(cTroothFraction, "to_s", to_string, 0);
   rb_define_method(cTroothFraction, "numerator", to_string, 0);
   rb_define_method(cTroothFraction, "denominator", to_string, 0);
-
-
-	globalEnvironment = TR_Environment_alloc();
 }
 
 static void validate_is_Fraction(VALUE rb_object)

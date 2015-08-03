@@ -6,5 +6,6 @@
 #include "trooth_fraction.h"
 
 extern VALUE mTrooth;
+extern TR_Environment* globalEnvironment;
 
 #endif
