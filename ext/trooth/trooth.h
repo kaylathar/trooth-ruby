@@ -3,6 +3,7 @@
 
 #include <ruby.h>
 #include "trooth_bigint.h"
+#include "trooth_fraction.h"
 
 extern VALUE mTrooth;
 

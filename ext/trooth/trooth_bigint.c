@@ -4,7 +4,7 @@
 #include <ruby/ruby.h>
 
 static TR_Environment* globalEnvironment;
-static VALUE cTroothBigInt;
+VALUE cTroothBigInt;
 
 static void validate_is_BigInt(VALUE rb_object);
 static int compare_BigInt(VALUE val1, VALUE val2);

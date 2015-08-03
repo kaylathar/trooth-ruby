@@ -2,6 +2,7 @@
 #define TROOTH_BIGINT_H
 #include <trooth/bigint.h>
 
+extern VALUE cTroothBigInt;
 void Init_trooth_BigInt();
 
 typedef struct {
