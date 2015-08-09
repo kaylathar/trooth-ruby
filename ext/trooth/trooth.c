@@ -9,5 +9,5 @@ void Init_trooth()
 	globalEnvironment = TR_Environment_alloc();
 
 	Init_trooth_BigInt();
-	Init_trooth_Fraction();
+	Init_trooth_Rational();
 }

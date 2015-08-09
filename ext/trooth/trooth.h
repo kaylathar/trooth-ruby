@@ -3,7 +3,7 @@
 
 #include <ruby.h>
 #include "trooth_bigint.h"
-#include "trooth_fraction.h"
+#include "trooth_rational.h"
 
 extern VALUE mTrooth;
 extern TR_Environment* globalEnvironment;
