@@ -12,6 +12,7 @@ static VALUE subtract(VALUE self, VALUE rb_object);
 static VALUE multiply(VALUE self, VALUE rb_object);
 static VALUE absolute(VALUE self);
 static VALUE initialize(VALUE self, VALUE rb_object);
+static VALUE initialize_big_big(VALUE self, VALUE rb_object1, VALUE rb_object2);
 static VALUE allocate(VALUE klass);
 static VALUE deallocate(void* bigInt);
 static TR_Rational* ruby_obj_to_rational(VALUE rb_object);
@@ -22,6 +23,7 @@ void Init_trooth_Rational()
 	cTroothRational = rb_define_class_under(mTrooth,"Rational", rb_cObject);
 	rb_define_alloc_func(cTroothRational, allocate);
 	rb_define_method(cTroothRational, "initialize", initialize, 1);
+	rb_define_method(cTroothRational, "initialize", initialize_big_big, 2);
 	rb_define_method(cTroothRational, "+", add, 1);
 	rb_define_method(cTroothRational, "-", subtract, 1);
 	rb_define_method(cTroothRational, "*", multiply, 1);
@@ -176,6 +178,30 @@ static VALUE initialize(VALUE self, VALUE rb_object)
 	Data_Get_Struct(self, Trooth_RationalWrapper, wrapper);
 
 	wrapper->num = ruby_obj_to_rational(rb_object);
+
+	return self;
+}
+
+static VALUE initialize_big_big(VALUE self, VALUE rb_object1, VALUE rb_object2)
+{
+	Trooth_RationalWrapper* wrapper;
+	Trooth_BigIntWrapper *num, *den;
+
+	if (RBASIC(rb_object1)->klass != cTroothBigInt || RBASIC(rb_object2)->klass != cTroothBigInt)
+	{
+		rb_raise(rb_eTypeError, "Parameters must be of type BigInt");
+	}
+
+	Data_Get_Struct(rb_object1, Trooth_BigIntWrapper, num);
+	Data_Get_Struct(rb_object2, Trooth_BigIntWrapper, den);
+	Data_Get_Struct(self, Trooth_RationalWrapper, wrapper);
+
+	if (num->num == NULL || den->num == NULL)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	wrapper->num = TR_Rational_fromIntegers(num->num,den->num);
 
 	return self;
 }

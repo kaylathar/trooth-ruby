@@ -12,6 +12,13 @@ describe Trooth::Rational do
       expect(test_num.to_s).to eq('1/2')
     end
 
+    it 'works from two BigInts' do
+      num = Trooth::BigInt.new('3')
+      den = Trooth::BigInt.new('4')
+      test_num = Trooth::Rational.new(num, den)
+      expect(test_num.to_s).to eq('3/4')
+    end
+
     it 'simplifies forms' do
       test_num = Trooth::Rational.new('5/10')
       expect(test_num.to_s).to eq('1/2')
