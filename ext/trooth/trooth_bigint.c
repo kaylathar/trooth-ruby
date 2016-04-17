@@ -10,6 +10,8 @@ static int compare_BigInt(VALUE val1, VALUE val2);
 static VALUE add(VALUE self, VALUE rb_object);
 static VALUE subtract(VALUE self, VALUE rb_object);
 static VALUE multiply(VALUE self, VALUE rb_object);
+static VALUE divide(VALUE self, VALUE rb_object);
+static VALUE modulo(VALUE self, VALUE rb_object);
 static VALUE not_equals(VALUE self, VALUE rb_object);
 static VALUE equals(VALUE self, VALUE rb_object);
 static VALUE greater_than(VALUE self, VALUE rb_object);
@@ -31,6 +33,8 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, "+", add, 1);
 	rb_define_method(cTroothBigInt, "-", subtract, 1);
 	rb_define_method(cTroothBigInt, "*", multiply, 1);
+	rb_define_method(cTroothBigInt, "/", divide, 1);
+	rb_define_method(cTroothBigInt, "%", modulo, 1);
 	rb_define_method(cTroothBigInt, "==", equals, 1);
 	rb_define_method(cTroothBigInt, "!=", not_equals, 1);
 	rb_define_method(cTroothBigInt, "<", less_than, 1);
@@ -114,6 +118,59 @@ static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object)
 	return bigInt;
 }
 
+static VALUE divide(VALUE self, VALUE rb_object)
+{
+	Trooth_BigIntWrapper *wrapper1,*wrapper2,*wrapper3;
+	TR_BigInt_DivisionResult* result;
+	VALUE obj;
+
+	validate_is_BigInt(self);
+	validate_is_BigInt(rb_object);
+
+	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper1);
+	Data_Get_Struct(rb_object, Trooth_BigIntWrapper, wrapper2);
+
+	if (!wrapper1->num || !wrapper2->num)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	 result = TR_BigInt_divide(wrapper1->num,wrapper2->num);
+
+	 obj = allocate(cTroothBigInt);
+	 Data_Get_Struct(obj, Trooth_BigIntWrapper, wrapper3);
+	 wrapper3->num = TR_BigInt_DivisionResult_quotient(result);
+
+	 TR_BigInt_DivisionResult_free(result);
+	 return obj;
+}
+
+static VALUE modulo(VALUE self, VALUE rb_object)
+{
+	Trooth_BigIntWrapper *wrapper1,*wrapper2,*wrapper3;
+	TR_BigInt_DivisionResult* result;
+	VALUE obj;
+
+	validate_is_BigInt(self);
+	validate_is_BigInt(rb_object);
+
+	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper1);
+	Data_Get_Struct(rb_object, Trooth_BigIntWrapper, wrapper2);
+
+	if (!wrapper1->num || !wrapper2->num)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	 result = TR_BigInt_divide(wrapper1->num,wrapper2->num);
+
+	 obj = allocate(cTroothBigInt);
+	 Data_Get_Struct(obj, Trooth_BigIntWrapper, wrapper3);
+	 wrapper3->num = TR_BigInt_DivisionResult_remainder(result);
+
+	 TR_BigInt_DivisionResult_free(result);
+	 return obj;
+}
 
 static VALUE add(VALUE self, VALUE rb_object)
 {

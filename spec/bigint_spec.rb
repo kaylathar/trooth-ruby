@@ -72,4 +72,23 @@ describe Trooth::BigInt do
       expect((neg2 - pos1).to_s).to eq('-1244')
     end
   end
+
+  context 'divide' do
+    it 'can divide two positives' do
+      expect((pos1 / pos2).to_s).to eq('123')
+      expect((pos2 / pos1).to_s).to eq('0')
+    end
+
+    it 'can divide two negatives' do
+      expect((neg1 / neg2).to_s).to eq('123')
+      expect((neg2 / neg1).to_s).to eq('0')
+    end
+
+    it 'can divide a positive and negative' do
+      expect((pos2 / neg2).to_s).to eq('-1')
+      expect((neg1 / pos1).to_s).to eq('-1')
+      expect((neg1 / pos2).to_s).to eq('-123')
+      expect((neg2 / pos1).to_s).to eq('0')
+    end
+  end
 end

@@ -27,8 +27,8 @@ void Init_trooth_Rational()
 	rb_define_method(cTroothRational, "*", multiply, 1);
 	rb_define_method(cTroothRational, "abs", absolute, 0);
 	rb_define_method(cTroothRational, "to_s", to_string, 0);
-  rb_define_method(cTroothRational, "numerator", to_string, 0);
-  rb_define_method(cTroothRational, "denominator", to_string, 0);
+  	rb_define_method(cTroothRational, "numerator", to_string, 0);
+  	rb_define_method(cTroothRational, "denominator", to_string, 0);
 }
 
 static void validate_is_Rational(VALUE rb_object)
