@@ -91,4 +91,23 @@ describe Trooth::BigInt do
       expect((neg2 / pos1).to_s).to eq('0')
     end
   end
+
+  context 'modulo' do
+    it 'can modulo two positives' do
+      expect((pos1 % pos2).to_s).to eq('4')
+      expect((pos2 % pos1).to_s).to eq('10')
+    end
+
+    it 'can modulo two negatives' do
+      expect((neg1 % neg2).to_s).to eq('4')
+      expect((neg2 % neg1).to_s).to eq('10')
+    end
+
+    it 'can modulo a positive and negative' do
+      expect((pos2 % neg2).to_s).to eq('0')
+      expect((neg1 % pos1).to_s).to eq('0')
+      expect((neg1 % pos2).to_s).to eq('4')
+      expect((neg2 % pos1).to_s).to eq('10')
+    end
+  end
 end
