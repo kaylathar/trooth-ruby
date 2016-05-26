@@ -16,6 +16,21 @@ describe Trooth::BigInt do
       test_num = Trooth::BigInt.new(12_345)
       expect(test_num.to_s).to eq('12345')
     end
+
+    it 'works from a Float' do
+      test_num = Trooth::BigInt.new(12_345.10)
+      expect(test_num.to_s).to eq('12345')
+    end
+
+    it 'fails for unknown types' do
+      # Test class that is not numeric type
+      tmp_class = Class.new do
+        def initialize
+        end
+      end
+
+      expect { Trooth::BigInt.new(tmp_class.new) }.to raise_error
+    end
   end
 
   context 'addition' do

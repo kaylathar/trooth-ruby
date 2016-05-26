@@ -97,16 +97,21 @@ static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object)
 	TR_BigInt *bigInt = NULL;
 	VALUE tmpStr;
 	ID toStringSymbol;
+	ID toIntSymbol;
 
 	switch(TYPE(rb_object))
 	{
 		/* When API is available, we can handle these faster */
-		case T_FIXNUM:
+		case T_FLOAT:
+			toIntSymbol = rb_intern("to_int");
+			rb_object = rb_funcall(rb_object,toIntSymbol,0);
+			/* Intentional fall-through */
 		case T_BIGNUM:
+		case T_FIXNUM:
 			toStringSymbol = rb_intern("to_s");
 			tmpStr = rb_funcall(rb_object,toStringSymbol,0);
 			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(tmpStr));
-			break;
+			break;			
 		case T_STRING:
 			bigInt = TR_BigInt_fromString(globalEnvironment, StringValueCStr(rb_object));
 			break;
