@@ -12,6 +12,37 @@ describe Trooth::Rational do
       expect(test_num.to_s).to eq('1/2')
     end
 
+    it 'works from two strings' do
+      test_num = Trooth::Rational.new('1', '4')
+      expect(test_num.to_s).to eq('1/4')
+    end
+
+    it 'works from two fixnums' do
+      test_num = Trooth::Rational.new(1, 4)
+      expect(test_num.to_s).to eq('1/4')
+    end
+
+    it 'works from a mix of fixnums, strings, bigints' do
+      num = Trooth::BigInt.new('3')
+      test_num = Trooth::Rational.new('1', num)
+      expect(test_num.to_s).to eq('1/3')
+
+      test_num = Trooth::Rational.new(num, '2')
+      expect(test_num.to_s).to eq('3/2')
+
+      test_num = Trooth::Rational.new(num, 2)
+      expect(test_num.to_s).to eq('3/2')
+
+      test_num = Trooth::Rational.new(2, num)
+      expect(test_num.to_s).to eq('2/3')
+
+      test_num = Trooth::Rational.new(2, '3')
+      expect(test_num.to_s).to eq('2/3')
+
+      test_num = Trooth::Rational.new('3', 2)
+      expect(test_num.to_s).to eq('3/2')
+    end
+
     it 'works from two BigInts' do
       num = Trooth::BigInt.new('3')
       den = Trooth::BigInt.new('4')

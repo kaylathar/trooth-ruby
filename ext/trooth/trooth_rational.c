@@ -169,22 +169,43 @@ static VALUE denominator(VALUE self)
     return queryElement(self,Rational_Denominator);
 }
 
+static VALUE convertToBigInt(VALUE arg)
+{
+	VALUE args[1];
+
+	switch (TYPE(arg))
+	{
+		case T_FLOAT:
+		case T_BIGNUM:
+		case T_FIXNUM:
+		case T_STRING:
+			args[0] = arg;
+			arg = rb_class_new_instance(1, args, cTroothBigInt);
+		default:
+			if (RBASIC(arg)->klass != cTroothBigInt) {
+				rb_raise(rb_eTypeError, "parameters must be of type BigInt or convertible to BigInt");
+			}
+	}
+
+	return arg;
+}
+
 static VALUE initialize(int argc, VALUE* argv, VALUE self)
 {
 	Trooth_RationalWrapper* wrapper;
 	Trooth_BigIntWrapper *num, *den;
+	VALUE arg1;
+	VALUE arg2;
 
 	Data_Get_Struct(self, Trooth_RationalWrapper, wrapper);
 
 	if (argc == 2)
 	{
-		if (RBASIC(argv[0])->klass != cTroothBigInt || RBASIC(argv[1])->klass != cTroothBigInt)
-		{
-			rb_raise(rb_eTypeError, "Parameters must be of type BigInt");
-		}
+		arg1 = convertToBigInt(argv[0]);
+		arg2 = convertToBigInt(argv[1]);
 
-		Data_Get_Struct(argv[0], Trooth_BigIntWrapper, num);
-		Data_Get_Struct(argv[1], Trooth_BigIntWrapper, den);
+		Data_Get_Struct(arg1, Trooth_BigIntWrapper, num);
+		Data_Get_Struct(arg2, Trooth_BigIntWrapper, den);
 
 		if (num->num == NULL || den->num == NULL)
 		{
