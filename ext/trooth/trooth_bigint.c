@@ -24,6 +24,7 @@ static VALUE allocate(VALUE klass);
 static VALUE deallocate(void* bigInt);
 static TR_BigInt* ruby_obj_to_bigint(VALUE rb_object);
 static VALUE to_string(VALUE self);
+static VALUE to_integer(VALUE self);
 
 void Init_trooth_BigInt()
 {
@@ -43,6 +44,7 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, ">=", greater_than_equal, 1);
 	rb_define_method(cTroothBigInt, "abs", absolute, 0);
 	rb_define_method(cTroothBigInt, "to_s", to_string, 0);
+	rb_define_method(cTroothBigInt, "to_i", to_integer, 0);
 }
 
 static void validate_is_BigInt(VALUE rb_object)
@@ -274,6 +276,33 @@ static VALUE to_string(VALUE self)
 
 	 result = TR_BigInt_toString(wrapper->num);
 	 obj = rb_str_new2(result);
+	 free(result);
+
+	 return obj;
+}
+
+
+static VALUE to_integer(VALUE self)
+{
+	Trooth_BigIntWrapper *wrapper;
+	char* result;
+	VALUE obj;
+	ID toIntSymbol;
+
+	validate_is_BigInt(self);
+
+	Data_Get_Struct(self, Trooth_BigIntWrapper, wrapper);
+
+	if (!wrapper->num)
+	{
+		rb_raise(rb_eRuntimeError, "not fully initialized BigInt");
+	}
+
+	 result = TR_BigInt_toString(wrapper->num);
+	 obj = rb_str_new2(result);
+	 toIntSymbol = rb_intern("to_i");
+	 obj = rb_funcall(obj,toIntSymbol,0);
+
 	 free(result);
 
 	 return obj;

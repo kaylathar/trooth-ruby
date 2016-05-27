@@ -33,6 +33,18 @@ describe Trooth::BigInt do
     end
   end
 
+  context 'conversion' do
+    it 'supports conversion to string' do
+      test_num = Trooth::BigInt.new(12)
+      expect(test_num.to_s).to eq('12')
+    end
+
+    it 'supports conversion to integers' do
+      test_num = Trooth::BigInt.new(12_345)
+      expect(test_num.to_i).to eq(12_345)
+    end
+  end
+
   context 'addition' do
     it 'can add two positives' do
       expect((pos1 + pos2).to_s).to eq('1244')
