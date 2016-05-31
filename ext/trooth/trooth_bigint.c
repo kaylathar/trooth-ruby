@@ -18,6 +18,7 @@ static VALUE greater_than(VALUE self, VALUE rb_object);
 static VALUE less_than(VALUE self, VALUE rb_object);
 static VALUE greater_than_equal(VALUE self, VALUE rb_object);
 static VALUE less_than_equal(VALUE self, VALUE rb_object);
+static VALUE compare(VALUE self, VALUE rb_object);
 static VALUE absolute(VALUE self);
 static VALUE initialize(VALUE self, VALUE rb_object);
 static VALUE allocate(VALUE klass);
@@ -42,6 +43,7 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, ">", greater_than, 1);
 	rb_define_method(cTroothBigInt, "<=", less_than_equal, 1);
 	rb_define_method(cTroothBigInt, ">=", greater_than_equal, 1);
+	rb_define_method(cTroothBigInt, "<=>", compare, 1);
 	rb_define_method(cTroothBigInt, "abs", absolute, 0);
 	rb_define_method(cTroothBigInt, "to_s", to_string, 0);
 	rb_define_method(cTroothBigInt, "to_i", to_integer, 0);
@@ -212,6 +214,11 @@ static VALUE greater_than(VALUE self, VALUE rb_object)
 static VALUE less_than(VALUE self, VALUE rb_object)
 {
 	return compare_BigInt(self,rb_object)==-1?Qtrue:Qfalse;
+}
+
+static VALUE compare(VALUE self, VALUE rb_object)
+{
+	return INT2NUM(compare_BigInt(self,rb_object));
 }
 
 static VALUE greater_than_equal(VALUE self, VALUE rb_object)

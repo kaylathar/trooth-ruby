@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Trooth::BigInt do
   let(:pos1) { Trooth::BigInt.new('1234') }
+  let(:pos3) { Trooth::BigInt.new('1234') }
   let(:neg1) { Trooth::BigInt.new('-1234') }
   let(:neg2) { Trooth::BigInt.new('-10') }
   let(:pos2) { Trooth::BigInt.new('10') }
@@ -30,6 +31,56 @@ describe Trooth::BigInt do
       end
 
       expect { Trooth::BigInt.new(tmp_class.new) }.to raise_error
+    end
+  end
+
+  context 'comparison' do
+    it 'supports greater than' do
+      expect(pos1 > neg1).to eq(true)
+      expect(pos1 > pos2).to eq(true)
+      expect(pos2 > pos1).to eq(false)
+      expect(neg1 > pos1).to eq(false)
+    end
+
+    it 'supports less than' do
+      expect(pos1 < neg1).to eq(false)
+      expect(pos1 < pos2).to eq(false)
+      expect(pos2 < pos1).to eq(true)
+      expect(neg1 < pos1).to eq(true)
+    end
+
+    it 'supports equal to' do
+      expect(pos1 == pos3).to eq(true)
+      expect(pos2 == pos1).to eq(false)
+    end
+
+    it 'supports not equal to' do
+      expect(pos1 != pos3).to eq(false)
+      expect(pos2 != pos1).to eq(true)
+    end
+
+    it 'supports comparison' do
+      expect(pos1 <=> pos2).to eq(1)
+      expect(pos1 <=> pos3).to eq(0)
+      expect(pos2 <=> pos1).to eq(-1)
+      expect(pos1 <=> neg1).to eq(1)
+      expect(neg1 <=> pos1).to eq(-1)
+    end
+
+    it 'supports greater than or equal to' do
+      expect(pos1 >= neg1).to eq(true)
+      expect(pos1 >= pos2).to eq(true)
+      expect(pos2 >= pos1).to eq(false)
+      expect(neg1 >= pos1).to eq(false)
+      expect(pos1 >= pos3).to eq(true)
+    end
+
+    it 'supports less than or equal to' do
+      expect(pos1 <= neg1).to eq(false)
+      expect(pos1 <= pos2).to eq(false)
+      expect(pos2 <= pos1).to eq(true)
+      expect(neg1 <= pos1).to eq(true)
+      expect(pos1 <= pos3).to eq(true)
     end
   end
 
