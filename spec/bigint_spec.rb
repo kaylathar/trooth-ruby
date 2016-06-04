@@ -32,6 +32,30 @@ describe Trooth::BigInt do
 
       expect { Trooth::BigInt.new(tmp_class.new) }.to raise_error
     end
+
+    it 'supports += operator' do
+      test_num = Trooth::BigInt.new('1234')
+      test_num += Trooth::BigInt.new('1')
+      expect(test_num.to_s).to eq('1235')
+    end
+
+    it 'supports -= operator' do
+      test_num = Trooth::BigInt.new('1234')
+      test_num -= Trooth::BigInt.new('1')
+      expect(test_num.to_s).to eq('1233')
+    end
+
+    it 'supports *= operator' do
+      test_num = Trooth::BigInt.new('123')
+      test_num *= Trooth::BigInt.new('2')
+      expect(test_num.to_s).to eq('246')
+    end
+
+    it 'supports /= operator' do
+      test_num = Trooth::BigInt.new('222')
+      test_num /= Trooth::BigInt.new('2')
+      expect(test_num.to_s).to eq('111')
+    end
   end
 
   context 'comparison' do
