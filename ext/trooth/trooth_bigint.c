@@ -10,6 +10,7 @@ static int compare_BigInt(VALUE val1, VALUE val2);
 static VALUE add(VALUE self, VALUE rb_object);
 static VALUE subtract(VALUE self, VALUE rb_object);
 static VALUE multiply(VALUE self, VALUE rb_object);
+static VALUE exponentiate(VALUE self, VALUE rb_object);
 static VALUE divide(VALUE self, VALUE rb_object);
 static VALUE modulo(VALUE self, VALUE rb_object);
 static VALUE not_equals(VALUE self, VALUE rb_object);
@@ -35,6 +36,7 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, "+", add, 1);
 	rb_define_method(cTroothBigInt, "-", subtract, 1);
 	rb_define_method(cTroothBigInt, "*", multiply, 1);
+	rb_define_method(cTroothBigInt, "**", exponentiate, 1);
 	rb_define_method(cTroothBigInt, "/", divide, 1);
 	rb_define_method(cTroothBigInt, "%", modulo, 1);
 	rb_define_method(cTroothBigInt, "==", equals, 1);
@@ -194,6 +196,11 @@ static VALUE subtract(VALUE self, VALUE rb_object)
 static VALUE multiply(VALUE self, VALUE rb_object)
 {
 	return execute_arithmetic(self,rb_object,TR_BigInt_multiply);
+}
+
+static VALUE exponentiate(VALUE self, VALUE rb_object)
+{
+	return execute_arithmetic(self,rb_object,TR_BigInt_exponentiate);
 }
 
 static VALUE not_equals(VALUE self, VALUE rb_object)

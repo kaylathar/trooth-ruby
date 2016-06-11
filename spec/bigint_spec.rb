@@ -120,6 +120,14 @@ describe Trooth::BigInt do
     end
   end
 
+  context 'exponentiation' do
+    it 'supports exponentiation operator' do
+      test_num = Trooth::BigInt.new(2)
+      test_expo = Trooth::BigInt.new(4)
+      expect((test_num**test_expo).to_i).to eq(16)
+    end
+  end
+
   context 'addition' do
     it 'can add two positives' do
       expect((pos1 + pos2).to_s).to eq('1244')
