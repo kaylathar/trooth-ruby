@@ -5,6 +5,7 @@ describe Trooth::Rational do
   let(:neg1) { Trooth::Rational.new('-1234/3') }
   let(:neg2) { Trooth::Rational.new('-10/3') }
   let(:pos2) { Trooth::Rational.new('10/3') }
+  let(:pos3) { Trooth::Rational.new('10/3') }
 
   context 'initialization' do
     it 'works from a string' do
@@ -68,6 +69,22 @@ describe Trooth::Rational do
     it 'normalizes negatives consistently' do
       test_num = Trooth::Rational.new('5/-10')
       expect(test_num.to_s).to eq('-1/2')
+    end
+  end
+
+  context 'comparisons' do
+    it 'supports equality checks' do
+      expect(pos2 == pos3).to eq(true)
+      expect(pos3 == pos1).to eq(false)
+      expect(pos1 != pos2).to eq(true)
+      expect(pos2 != pos1).to eq(true)
+    end
+
+    it 'supports inequality checks' do
+      expect(pos1 != pos2).to eq(true)
+      expect(pos2 != pos1).to eq(true)
+      expect(pos3 != pos2).to eq(false)
+      expect(pos2 != pos3).to eq(false)
     end
   end
 

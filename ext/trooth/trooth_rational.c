@@ -10,11 +10,15 @@ static VALUE denominator(VALUE self);
 static VALUE add(VALUE self, VALUE rb_object);
 static VALUE subtract(VALUE self, VALUE rb_object);
 static VALUE multiply(VALUE self, VALUE rb_object);
+static VALUE not_equals(VALUE self, VALUE rb_object);
+static VALUE equals(VALUE self, VALUE rb_object);
 static VALUE absolute(VALUE self);
 static VALUE initialize(int argc, VALUE* argv, VALUE self);
 static VALUE allocate(VALUE klass);
 static VALUE deallocate(void* bigInt);
 static TR_Rational* ruby_obj_to_rational(VALUE rb_object);
+static VALUE denominator_to_string(VALUE self);
+static VALUE numerator_to_string(VALUE self);
 static VALUE to_string(VALUE self);
 
 void Init_trooth_Rational()
@@ -25,10 +29,12 @@ void Init_trooth_Rational()
 	rb_define_method(cTroothRational, "+", add, 1);
 	rb_define_method(cTroothRational, "-", subtract, 1);
 	rb_define_method(cTroothRational, "*", multiply, 1);
+	rb_define_method(cTroothRational, "==", equals, 1);
+	rb_define_method(cTroothRational, "!=", not_equals, 1);
 	rb_define_method(cTroothRational, "abs", absolute, 0);
 	rb_define_method(cTroothRational, "to_s", to_string, 0);
-  	rb_define_method(cTroothRational, "numerator", to_string, 0);
-  	rb_define_method(cTroothRational, "denominator", to_string, 0);
+  	rb_define_method(cTroothRational, "numerator", numerator, 0);
+  	rb_define_method(cTroothRational, "denominator", denominator, 0);
 }
 
 static void validate_is_Rational(VALUE rb_object)
@@ -126,10 +132,33 @@ static VALUE absolute(VALUE self)
 	 return obj;
 }
 
+static int compare_Rational(VALUE self, VALUE rb_object)
+{
+	Trooth_RationalWrapper *wrapper1,*wrapper2;
+
+	validate_is_Rational(self);
+	validate_is_Rational(rb_object);
+
+	Data_Get_Struct(self, Trooth_RationalWrapper, wrapper1);
+	Data_Get_Struct(rb_object, Trooth_RationalWrapper, wrapper2);
+
+	return TR_Rational_compare(wrapper1->num, wrapper2->num);
+}
+
+static VALUE not_equals(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) != 0?Qtrue:Qfalse;
+}
+
+static VALUE equals(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) == 0?Qtrue:Qfalse;
+}
+
 static VALUE queryElement(VALUE self, TR_Rational_ElementType type)
 {
 	Trooth_RationalWrapper *wrapper1;
-  Trooth_BigIntWrapper *wrapper2;
+  	Trooth_BigIntWrapper *wrapper2;
 	TR_BigInt* result;
 	VALUE obj;
 
