@@ -1,0 +1,12 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
+# Allow longer blocks in spec files
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+# Allow development dependencies in gemspec for compatibility
+Gemspec/DevelopmentDependencies:
+  Enabled: false

@@ -25,10 +25,7 @@ describe Trooth::BigInt do
 
     it 'fails for unknown types' do
       # Test class that is not numeric type
-      tmp_class = Class.new do
-        def initialize
-        end
-      end
+      tmp_class = Class.new
 
       expect { Trooth::BigInt.new(tmp_class.new) }.to raise_error
     end

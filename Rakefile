@@ -12,7 +12,7 @@ RSpec::Core::RakeTask.new(:spec)
 Rake::ExtensionTask.new('trooth', spec)
 
 desc 'Validate Package'
-task validate: [:rubocop, :compile, :spec]
+task validate: %i[rubocop compile spec]
 task default: :validate
 
 desc 'Run Rubocop'
