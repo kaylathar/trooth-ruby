@@ -21,6 +21,7 @@ static VALUE greater_than_equal(VALUE self, VALUE rb_object);
 static VALUE less_than_equal(VALUE self, VALUE rb_object);
 static VALUE compare(VALUE self, VALUE rb_object);
 static VALUE absolute(VALUE self);
+static VALUE gcd(VALUE self, VALUE rb_object);
 static VALUE initialize(VALUE self, VALUE rb_object);
 static VALUE allocate(VALUE klass);
 static VALUE deallocate(void* bigInt);
@@ -47,6 +48,7 @@ void Init_trooth_BigInt()
 	rb_define_method(cTroothBigInt, ">=", greater_than_equal, 1);
 	rb_define_method(cTroothBigInt, "<=>", compare, 1);
 	rb_define_method(cTroothBigInt, "abs", absolute, 0);
+	rb_define_method(cTroothBigInt, "gcd", gcd, 1);
 	rb_define_method(cTroothBigInt, "to_s", to_string, 0);
 	rb_define_method(cTroothBigInt, "to_i", to_integer, 0);
 }
@@ -260,6 +262,11 @@ static VALUE absolute(VALUE self)
 	 Data_Get_Struct(obj, Trooth_BigIntWrapper, wrapper2);
 	 wrapper2->num = result;
 	 return obj;
+}
+
+static VALUE gcd(VALUE self, VALUE rb_object)
+{
+	return execute_arithmetic(self, rb_object, TR_BigInt_gcd);
 }
 
 static VALUE initialize(VALUE self, VALUE rb_object)

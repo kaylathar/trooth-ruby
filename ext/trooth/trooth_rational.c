@@ -10,8 +10,14 @@ static VALUE denominator(VALUE self);
 static VALUE add(VALUE self, VALUE rb_object);
 static VALUE subtract(VALUE self, VALUE rb_object);
 static VALUE multiply(VALUE self, VALUE rb_object);
+static VALUE divide(VALUE self, VALUE rb_object);
 static VALUE not_equals(VALUE self, VALUE rb_object);
 static VALUE equals(VALUE self, VALUE rb_object);
+static VALUE greater_than(VALUE self, VALUE rb_object);
+static VALUE less_than(VALUE self, VALUE rb_object);
+static VALUE greater_than_equal(VALUE self, VALUE rb_object);
+static VALUE less_than_equal(VALUE self, VALUE rb_object);
+static VALUE compare(VALUE self, VALUE rb_object);
 static VALUE absolute(VALUE self);
 static VALUE initialize(int argc, VALUE* argv, VALUE self);
 static VALUE allocate(VALUE klass);
@@ -29,8 +35,14 @@ void Init_trooth_Rational()
 	rb_define_method(cTroothRational, "+", add, 1);
 	rb_define_method(cTroothRational, "-", subtract, 1);
 	rb_define_method(cTroothRational, "*", multiply, 1);
+	rb_define_method(cTroothRational, "/", divide, 1);
 	rb_define_method(cTroothRational, "==", equals, 1);
 	rb_define_method(cTroothRational, "!=", not_equals, 1);
+	rb_define_method(cTroothRational, "<", less_than, 1);
+	rb_define_method(cTroothRational, ">", greater_than, 1);
+	rb_define_method(cTroothRational, "<=", less_than_equal, 1);
+	rb_define_method(cTroothRational, ">=", greater_than_equal, 1);
+	rb_define_method(cTroothRational, "<=>", compare, 1);
 	rb_define_method(cTroothRational, "abs", absolute, 0);
 	rb_define_method(cTroothRational, "to_s", to_string, 0);
   	rb_define_method(cTroothRational, "numerator", numerator, 0);
@@ -153,6 +165,31 @@ static VALUE not_equals(VALUE self, VALUE rb_object)
 static VALUE equals(VALUE self, VALUE rb_object)
 {
 	return compare_Rational(self, rb_object) == 0?Qtrue:Qfalse;
+}
+
+static VALUE greater_than(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) == 1?Qtrue:Qfalse;
+}
+
+static VALUE less_than(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) == -1?Qtrue:Qfalse;
+}
+
+static VALUE compare(VALUE self, VALUE rb_object)
+{
+	return INT2NUM(compare_Rational(self, rb_object));
+}
+
+static VALUE greater_than_equal(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) > -1?Qtrue:Qfalse;
+}
+
+static VALUE less_than_equal(VALUE self, VALUE rb_object)
+{
+	return compare_Rational(self, rb_object) < 1?Qtrue:Qfalse;
 }
 
 static VALUE queryElement(VALUE self, TR_Rational_ElementType type)

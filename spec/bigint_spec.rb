@@ -125,6 +125,26 @@ describe Trooth::BigInt do
     end
   end
 
+  context 'gcd' do
+    it 'calculates GCD correctly' do
+      num1 = Trooth::BigInt.new(12)
+      num2 = Trooth::BigInt.new(4)
+      expect(num1.gcd(num2).to_i).to eq(4)
+    end
+
+    it 'handles coprime numbers' do
+      num1 = Trooth::BigInt.new(7)
+      num2 = Trooth::BigInt.new(3)
+      expect(num1.gcd(num2).to_i).to eq(1)
+    end
+
+    it 'handles same numbers' do
+      num1 = Trooth::BigInt.new(15)
+      num2 = Trooth::BigInt.new(15)
+      expect(num1.gcd(num2).to_i).to eq(15)
+    end
+  end
+
   context 'addition' do
     it 'can add two positives' do
       expect((pos1 + pos2).to_s).to eq('1244')
